@@ -13,7 +13,7 @@
                                 :background :black
                                 :foreground :green
                                 :text "00:00"))
-(defn b-time [] (map #(get (tb/value-at center % ) :time) (range (dec (tb/row-count center)))))
+(defn b-time [] (map #(get (tb/value-at center % ) :time) (range (tb/row-count center))))
 (defn next-bell-time [cur-time]
   (some #(and (> (.compareTo % cur-time) 0) %) (b-time)))
 
@@ -43,7 +43,7 @@
                                      ["урок 5" 8 "13:55"]
                                      ["перемена 5" 9 "14:35"]
                                      ["урок 6" 10 "14:45"]
-                                     {:text1 "конец" :no 11  :time "15:25"}
+                                     ["конец" 11  "15:25"]
                                      ]])
 (def center (s/table :show-grid? true :show-horizontal-lines? true
                      :model table-mod))
