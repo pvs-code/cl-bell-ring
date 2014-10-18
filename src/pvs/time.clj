@@ -4,9 +4,3 @@
 (defn now [] (t/to-time-zone (c/from-long (System/currentTimeMillis)) (t/default-time-zone)))
 (defn time-str [separator]
   (format "%02d%s%02d" (t/hour (now)) separator (t/minute (now))))
-(defn clock []
-  (do 
-    (Thread/sleep 1000)
-    (time-str ":")
-    (Thread/sleep 1000)
-    (time-str " ")))
