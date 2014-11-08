@@ -13,6 +13,24 @@
                                 :background :black
                                 :foreground :green
                                 :text "00:00"))
+
+(def table-mod [:columns [:text1 {:key :no :text "n"} {:key :time :text "время"}]
+                              :rows [
+                                     ["урок 1" 1 "10:00"]
+                                     ["перемена 1" 2 "10:50"]
+                                     ["урок 2" 3 "11:05"]
+                                     ["перемена 2" 4 "11:45"]
+                                     ["урок 3" 1 "11:50"]
+                                     ["перемена 3" 5 "12:30"]
+                                     ["урок 4" 6 "12:35"]
+                                     ["обед" 7 "13:15"]
+                                     ["урок 5" 8 "13:55"]
+                                     ["перемена 5" 9 "14:35"]
+                                     ["урок 6" 10 "14:40"]
+                                     ["конец" 11  "15:20"]
+                                     ]])
+(def center (s/table :show-grid? true :show-horizontal-lines? true
+                     :model table-mod))
 (defn b-time [] (map #(get (tb/value-at center % ) :time) (range (tb/row-count center))))
 (defn next-bell-time [cur-time]
   (some #(and (> (.compareTo % cur-time) 0) %) (b-time)))
@@ -30,23 +48,7 @@
                        (s/make-widget [150 :by 5])
                        ))
 
-(def table-mod [:columns [:text1 {:key :no :text "n"} {:key :time :text "время"}]
-                              :rows [
-                                     ["урок 1" 1 "10:00"]
-                                     ["перемена 1" 2 "10:50"]
-                                     ["урок 2" 3 "11:05"]
-                                     ["перемена 2" 4 "11:45"]
-                                     ["урок 3" 1 "11:50"]
-                                     ["перемена 3" 5 "12:30"]
-                                     ["урок 4" 6 "12:35"]
-                                     ["обед" 7 "13:15"]
-                                     ["урок 5" 8 "13:55"]
-                                     ["перемена 5" 9 "14:35"]
-                                     ["урок 6" 10 "14:45"]
-                                     ["конец" 11  "15:25"]
-                                     ]])
-(def center (s/table :show-grid? true :show-horizontal-lines? true
-                     :model table-mod))
+
 (def dz (s/button :id :dz :text "дзынь !"))
 (def exec (Executors/newSingleThreadExecutor))
 (s/listen dz :action (fn [e] 
@@ -55,12 +57,15 @@
                                             (s/config! dz :enabled? false)
                                             (.play (j/player))
                                             (s/config! dz :enabled? true))))))
-(def f (s/frame :title "звонок" 
-              :content (s/border-panel
-                         :north (s/horizontal-panel :items north-items)
-                         :center center
-                         :south (s/horizontal-panel :items (list (s/button :text "GO") dz))
-                         :vgap 5 :hgap 5 :border 5)))
+(def f (s/frame
+        :title "звонок" 
+        :content (s/border-panel
+                  :north (s/horizontal-panel :items north-items)
+                  :center center
+                  :south (s/horizontal-panel :items (list (s/button :text "GO") dz))
+                  :vgap 5 :hgap 5 :border 5)
+        :on-close :exit)
+  )
 
 (defn clock [f b]
   (do 
