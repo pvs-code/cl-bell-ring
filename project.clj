@@ -13,5 +13,6 @@
                  [javazoom/jlayer "1.0.1"]
                  [clj-time "0.8.0"]]
   :plugins [                [cider/cider-nrepl "0.7.0"]]
+:resource-paths ["resources"]
   :main pvs.core
 )
